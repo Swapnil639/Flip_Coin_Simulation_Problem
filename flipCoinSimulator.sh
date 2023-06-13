@@ -3,7 +3,7 @@
 heads=0
 tails=0
 
-for ((i=1; i<=10; i++))
+while [ $heads -lt 21 ] && [ $tails -lt 21 ]
 do
   result=$((RANDOM % 2))
 
@@ -14,6 +14,20 @@ do
   fi
 done
 
-# Display the number of times "Heads" and "Tails" have won
-echo "Heads: $heads"
-echo "Tails: $tails"
+if [ $heads -gt $tails ]; then
+  winner="Heads"
+  margin=$((heads - tails))
+elif [ $tails -gt $heads ]; then
+  winner="Tails"
+  margin=$((tails - heads))
+else
+  winner="Tie"
+  margin=0
+fi
+
+# Display the result
+if [ $winner == "Tie" ]; then
+  echo "It's a tie!"
+else
+  echo "$winner won by a margin of $margin."
+fi
