@@ -3,6 +3,7 @@
 heads=0
 tails=0
 
+# Keep flipping the coin until either "Heads" or "Tails" has won 21 times
 while [ $heads -lt 21 ] && [ $tails -lt 21 ]
 do
   result=$((RANDOM % 2))
@@ -12,22 +13,31 @@ do
   else
     tails=$((tails + 1))
   fi
+
+  if [ $heads -eq $tails ]; then
+    continue
+  fi
+
+  # Determine the winner and the winning margin
+  if [ $heads -gt $tails ]; then
+    winner="Heads"
+    margin=$((heads - tails))
+  else
+    winner="Tails"
+    margin=$((tails - heads))
+  fi
+
+  # Check if the winning margin is at least 2
+  if [ $margin -ge 2 ]; then
+    break
+  fi
 done
 
-if [ $heads -gt $tails ]; then
-  winner="Heads"
-  margin=$((heads - tails))
-elif [ $tails -gt $heads ]; then
-  winner="Tails"
-  margin=$((tails - heads))
-else
-  winner="Tie"
-  margin=0
-fi
-
 # Display the result
-if [ $winner == "Tie" ]; then
-  echo "It's a tie!"
+if [ $winner == "Heads" ]; then
+  echo "Heads won by a margin of $margin."
+elif [ $winner == "Tails" ]; then
+  echo "Tails won by a margin of $margin."
 else
-  echo "$winner won by a margin of $margin."
+  echo "The game is tied."
 fi
